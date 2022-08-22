@@ -258,7 +258,7 @@ bool cGameItem::IsInView(float afMinDist)
 
 	//Angle
 	cVector3f vToMesh = mvBodies[0]->GetWorldPosition() - pCam->GetPosition();
-	vToMesh.Normalise();
+	vToMesh.Normalize();
 	float fAngle = cMath::Vector3Angle(pCam->GetForward(), vToMesh);
 	if(fAngle > cMath::ToRad(43)){
 		return false;

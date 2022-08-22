@@ -237,7 +237,7 @@ void cCharacterMove::Update(float afTimeStep)
 		TurnToAngle(fGoalAngle);
 		mpCharBody->SetPitch(0);
 		
-		mpCharBody->Move(eCharDir_Forward,1.0f, afTimeStep);
+		mpCharBody->Move(eCharDir_Forward,1.0f);
 
 		////////////////////////////////
 		//Update bounding volume
@@ -310,7 +310,7 @@ void cCharacterMove::Update(float afTimeStep)
 			if(std::abs(fAngleDist) >= mfMinBreakAngle && mpCharBody->GetMoveSpeed(eCharDir_Forward)>0.15f)
 			{
 				float fBreakAcc = -mfBreakAngleMul * std::abs(fAngleDist);
-				mpCharBody->Move(eCharDir_Forward,fBreakAcc,afTimeStep);
+				mpCharBody->Move(eCharDir_Forward,fBreakAcc);
 
 				mfCurrentBreak = fBreakAcc;
 			}
@@ -329,7 +329,7 @@ void cCharacterMove::Update(float afTimeStep)
 
 	cVector3f vWantedDir = mpCharBody->GetForward();
 	cVector3f vRealDir = mpCharBody->GetPosition() - mpCharBody->GetLastPosition();
-	vRealDir.Normalise();
+	vRealDir.Normalize();
 
 	float fCos = cMath::Vector3Dot(vWantedDir,vRealDir);
 
@@ -390,7 +390,7 @@ bool cCharacterMove::MoveToPos(const cVector3f &avPos)
 void cCharacterMove::MoveDirectToPos(const cVector3f &avFeetPos, float afTimeStep)
 {
 	TurnToPos(avFeetPos);
-	GetCharBody()->Move(eCharDir_Forward,1.0f,afTimeStep);
+	GetCharBody()->Move(eCharDir_Forward,1.0f);
 }
 
 //-----------------------------------------------------------------------
@@ -621,7 +621,7 @@ void cCharacterMove::OnPostSceneDraw(iLowLevelGraphics *apLowLevelGfx)
 		}
 	}
 
-	mpCharBody->GetBody()->RenderDebugGeometry(apLowLevelGfx,cColor(1,1,1,1));
+	mpCharBody->GetCurrentBody()->RenderDebugGeometry(apLowLevelGfx,cColor(1,1,1,1));
 
 	//return;
 	if(mbMoving==false) return;

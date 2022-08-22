@@ -768,7 +768,7 @@ void cMapHandler::AddSaveData(cSavedWorld* apSavedWorld)
 			iPhysicsJoint *pJoint = it.Next();
 			cEngineJoint_SaveData saveJoint;
 
-			if(pJoint->IsSaved())
+			if(false)
 			{
 				//Check if the joint should be saved.
 				if(pJoint->IsBroken()) continue;
@@ -1311,7 +1311,7 @@ void cMapHandler::OnPostSceneDraw()
 		{
 			iPhysicsBody* pBody = pEntity->GetBody(i);
 			if(pBody){
-				cBoundingVolume *pBV = pBody->GetBV();
+				cBoundingVolume *pBV = pBody->GetBoundingVolume();
 				mpInit->mpGame->GetGraphics()->GetLowLevel()->DrawBoxMaxMin(pBV->GetMax(),pBV->GetMin(),
 																cColor(1,0.5f,1));
 				//pBody->RenderDebugGeometry(mpInit->mpGame->GetGraphics()->GetLowLevel(),cColor(1,0.5f,1));
@@ -1828,7 +1828,7 @@ void cMapHandler::PreUpdate(double afTimeSinceVisit)
 	while(bodyIt.HasNext())
 	{
 		iPhysicsBody *pBody = bodyIt.Next();
-		pBody->SetEnabled(true);
+		pBody->Enable();
 	}
 	
 	//////////////////////////////////////

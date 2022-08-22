@@ -84,7 +84,7 @@ void cPlayerState_NormalHaptX::OnUpdate(float afTimeStep)
 		iPhysicsBody *pBody = static_cast<iPhysicsBody*>(it.Next());
 
 		if(pBody->GetUserData()==NULL) continue;
-		if(cMath::CheckCollisionBV(bv, *pBody->GetBV())==false) continue;
+		if(cMath::CheckCollisionBV(bv, *pBody->GetBoundingVolume())==false) continue;
 		
 		iGameEntity *pEntity = (iGameEntity*)pBody->GetUserData();
 		eGameEntityType type = pEntity->GetType();
@@ -110,7 +110,7 @@ void cPlayerState_NormalHaptX::OnUpdate(float afTimeStep)
 		if(pPhysicsWorld->CheckShapeCollision(	mpPlayer->GetHapticCamera()->GetHandShape(),
 												cMath::MatrixTranslate(vProxyPos),
 												pBody->GetShape(), pBody->GetWorldMatrix(),
-												collideData,1))
+												collideData,1,false))
 		{
 			pickedType = type;
 
@@ -991,7 +991,7 @@ void cPlayerState_ClimbHaptX::OnUpdate(float afTimeStep)
 	else if(mlState == 2)
 	{
 		mfLeaveAtTopCount -= afTimeStep;
-		pCharBody->Move(eCharDir_Forward,1,afTimeStep);
+		pCharBody->Move(eCharDir_Forward,1);
 
 		if(pCharBody->IsOnGround())
 		{
@@ -1079,8 +1079,8 @@ bool cPlayerState_ClimbHaptX::OnMoveForwards(float afMul, float afTimeStep)
 	//Check collision
 	cMatrixf mtxPos = cMath::MatrixTranslate(mvCharPosition);
 	cVector3f vNewPos;
-	pWorld->CheckShapeWorldCollision(&vNewPos,pCharBody->GetShape(),mtxPos,
-										pCharBody->GetBody(),false,true,NULL,true);
+	pWorld->CheckShapeWorldCollision(&vNewPos,pCharBody->GetCurrentShape(),mtxPos,
+										pCharBody->GetCurrentBody(),false,true,NULL,true);
 	if(vNewPos != mtxPos.GetTranslation())
 	{
 		return false;	

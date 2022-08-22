@@ -139,8 +139,8 @@ class cPlayerState_MoveHaptX_BodyCallback : public iPhysicsBodyCallback
 public:
 	cPlayerState_MoveHaptX_BodyCallback(cPlayer *apPlayer, float afTimeStep);
 	
-	bool OnBeginCollision(iPhysicsBody *apBody, iPhysicsBody *apCollideBody);
-	void OnCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody,cPhysicsContactData* apContactData);
+	bool OnAABBCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody);
+	void OnBodyCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody,cPhysicsContactData* apContactData);
 	
 	float mfTimeStep;
 	int mlBackCount;

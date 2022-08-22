@@ -556,7 +556,7 @@ void cEffect_DepthOfField::Update(float afTimeStep)
 
 void cEffect_DepthOfField::FocusOnBody(iPhysicsBody *apBody)
 {
-	cBoundingVolume *pBV = apBody->GetBV();
+	cBoundingVolume *pBV = apBody->GetBoundingVolume();
 	cVector3f vCamPos = mpInit->mpPlayer->GetCamera()->GetPosition();
 
 	//Focal plane
@@ -832,7 +832,7 @@ void cEffect_WaveGravity::Update(float afTimeStep)
 
 		if(	pBody->GetMass() != 0)
 		{
-			pBody->SetEnabled(true);
+			pBody->Enable();
 		}
 	}
 

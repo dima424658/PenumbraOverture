@@ -1006,7 +1006,7 @@ void cPlayerLean::Update(float afTimeStep)
 
 bool cPlayerLean::OnIntersect(iPhysicsBody *pBody,cPhysicsRayParams *apParams)
 {
-	if(pBody == mpPlayer->GetCharacterBody()->GetBody())return true;
+	if(pBody == mpPlayer->GetCharacterBody()->GetCurrentBody())return true;
 
 	mbIntersect = true;
 	return false;
@@ -1074,7 +1074,7 @@ void cPlayerDamage::Start(float afSize, ePlayerDamageType aType)
 
 	mvHeadSwingSpeed = cVector2f(cMath::RandRectf(-1,1), cMath::RandRectf(0,0.5f));
 	if(mvHeadSwingSpeed.x == 0 && mvHeadSwingSpeed.y == 0) mvHeadSwingSpeed.x = 1;
-	else mvHeadSwingSpeed.Normalise();
+	else mvHeadSwingSpeed.Normalize();
 
 	mvHeadSwingSpeed = mvHeadSwingSpeed * afSize*1.5f;
 
@@ -1325,7 +1325,7 @@ void cPlayerFlashLight::Reset()
 bool cPlayerFlashLight::OnIntersect(iPhysicsBody *pBody,cPhysicsRayParams *apParams)
 {
 	if(pBody->GetCollide()==false) return true;
-	if(pBody->IsCharacter() && pBody == mpInit->mpPlayer->GetCharacterBody()->GetBody()) return true;
+	if(pBody->IsCharacter() && pBody == mpInit->mpPlayer->GetCharacterBody()->GetCurrentBody()) return true;
 
 	if(apParams->mfDist < mfClosestDist)
 	{
@@ -1380,7 +1380,7 @@ void cPlayerFlashLight::Update(float afTimeStep)
 					cVector3f vToEnemy =	pEnemy->GetMover()->GetCharBody()->GetPosition() -
 											mpInit->mpPlayer->GetCharacterBody()->GetPosition();
 					float fSqrDist = vToEnemy.SqrLength();
-					vToEnemy.Normalise();
+					vToEnemy.Normalize();
 					
                     if(fSqrDist < 100.0f)
 					{
@@ -2411,7 +2411,7 @@ void cPlayerHidden::Update(float afTimeStep)
 		cWorld3D *pWorld = mpInit->mpGame->GetScene()->GetWorld3D();
 		if(pWorld==NULL) return;
 		iPhysicsWorld *pPhysicsWorld = pWorld->GetPhysicsWorld();
-		cBoundingVolume *pPlayerBV = pCharBody->GetBody()->GetBV();
+		cBoundingVolume *pPlayerBV = pCharBody->GetCurrentBody()->GetBoundingVolume();
 
 		//Just to be sure...
 		if(mpInit->mpPlayer->GetFlashLight()->IsActive()) mfLight+= 0.5;
@@ -2677,7 +2677,7 @@ void cPlayerHidden::UpdateEnemyTooClose(float afTimeStep)
 
 				//Check if enemy is in FOV
 				cVector3f vDir = pCharBody->GetPosition() - pCam->GetPosition();
-				vDir.Normalise();
+				vDir.Normalize();
 
 				float fAngle = cMath::Vector3Angle(pCam->GetForward(),vDir);
 				if(fAngle > pCam->GetFOV()*0.5f) continue;

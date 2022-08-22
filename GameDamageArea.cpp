@@ -152,26 +152,26 @@ void cGameDamageArea::Update(float afTimeStep)
 				{
 					if(pEntity->GetHealth() <=0 || pEntity->IsActive()==false) continue;
 				}
-				else if(mpInit->mpPlayer->GetCharacterBody()->GetBody() != pBody)
+				else if(mpInit->mpPlayer->GetCharacterBody()->GetCurrentBody() != pBody)
 				{
 					continue;
 				}
 
 				/////////////////////////
 				//Bounding volume check
-				if(cMath::CheckCollisionBV(*pBody->GetBV(), *pAreaBody->GetBV())==false) continue;
+				if(cMath::CheckCollisionBV(*pBody->GetBoundingVolume(), *pAreaBody->GetBoundingVolume())==false) continue;
 				
 				///////////////////////////////
 				//Check for collision
 				if(pPhysicsWorld->CheckShapeCollision(pBody->GetShape(),pBody->GetLocalMatrix(),
-					pAreaBody->GetShape(), pAreaBody->GetLocalMatrix(),collideData,1)==false)
+					pAreaBody->GetShape(), pAreaBody->GetLocalMatrix(),collideData,1,false)==false)
 				{
 					continue;
 				}
 
 				////////////////////
 				//Player
-				if(mpInit->mpPlayer->GetCharacterBody()->GetBody() == pBody)
+				if(mpInit->mpPlayer->GetCharacterBody()->GetCurrentBody() == pBody)
 				{
 					mpInit->mpPlayer->Damage(mfDamage,ePlayerDamageType_BloodSplash);
 				}

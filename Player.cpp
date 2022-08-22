@@ -744,7 +744,7 @@ void cPlayer::MoveForwards(float afMul,float afTimeStep)
 		//Only move if on ground
 		if(mlGroundCount<=0 || afMul==0) return;
 
-		mpCharBody->Move(eCharDir_Forward,afMul,afTimeStep);
+		mpCharBody->Move(eCharDir_Forward,afMul);
 		mbMoving = true;
 		mvMoveStates[mMoveState]->Start();
 	}
@@ -760,7 +760,7 @@ void cPlayer::MoveSideways(float afMul,float afTimeStep)
 		//Only move if on ground
 		if(mlGroundCount<=0 || afMul==0) return;
 
-		mpCharBody->Move(eCharDir_Right,afMul,afTimeStep);
+		mpCharBody->Move(eCharDir_Right,afMul);
 		mbMoving = true;
 		mvMoveStates[mMoveState]->Start();
 	}
@@ -989,9 +989,8 @@ void cPlayer::OnWorldLoad()
 	mpCharBody->AddExtraSize(cVector3f(mvSize.x, mfCrouchHeight,mvSize.z));
 
 	//Set so it is not saved:
-	mpCharBody->SetIsSaved(false);
-	mpCharBody->GetExtraBody(0)->SetIsSaved(false);
-	mpCharBody->GetExtraBody(1)->SetIsSaved(false);
+	mpCharBody->GetBody(0)->SetIsSaved(false);
+	mpCharBody->GetBody(1)->SetIsSaved(false);
 	
 	mvMoveStates[mMoveState]->EnterState(NULL);
 	mvMoveStates[mMoveState]->Start();
@@ -1195,15 +1194,15 @@ void cPlayer::Update(float afTimeStep)
 
 		for(size_t j=0; j< pEntity->mvBodies.size(); ++j)
 		{
-			iPhysicsBody *pParentBody = mpCharBody->GetBody();
+			iPhysicsBody *pParentBody = mpCharBody->GetCurrentBody();
 			iPhysicsBody *pChildBody = pEntity->mvBodies[j];
             
-			if(cMath::CheckCollisionBV( *pParentBody->GetBV(),*pChildBody->GetBV()))
+			if(cMath::CheckCollisionBV( *pParentBody->GetBoundingVolume(),*pChildBody->GetBoundingVolume()))
 			{
 				bCollide = pPhysicsWorld->CheckShapeCollision(pParentBody->GetShape(), 
 															pParentBody->GetLocalMatrix(),
 															pChildBody->GetShape(), 
-															pChildBody->GetLocalMatrix(),collideData,1);
+															pChildBody->GetLocalMatrix(),collideData,1,false);
 			}
 													
 			if(bCollide) break;
@@ -1286,7 +1285,7 @@ void cPlayer::Update(float afTimeStep)
 	//Cast ray and check for ground.
 	cVector3f vStart,vEnd;
 	
-	iCollideShape *pBodyShape = mpCharBody->GetShape();
+	iCollideShape *pBodyShape = mpCharBody->GetCurrentShape();
 	vStart = mpCharBody->GetPosition() - cVector3f(0,pBodyShape->GetSize().y/2-0.3f,0);
 	vEnd = vStart + cVector3f(0,-0.6f,0);
 

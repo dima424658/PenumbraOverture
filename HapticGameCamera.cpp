@@ -545,7 +545,7 @@ void cHapticGameCamera::UpdateProxyInteraction(float afTimeStep)
 
 		if(pBody->GetHapticShape()==NULL)
 		{
-			if(cMath::PointBVCollision(vProxyPos,*pBody->GetBV())==false) continue;
+			if(cMath::PointBVCollision(vProxyPos,*pBody->GetBoundingVolume())==false) continue;
 
 			/////////////////////////////////
 			//Special case for water
@@ -626,7 +626,7 @@ void cHapticGameCamera::UpdateProxyInteraction(float afTimeStep)
 			}
 				
 			//Particle system (and other effects)
-            pSurface->CreateImpactEffect(fProxySpeed*0.3f,vProxyPos,1,NULL);
+            pSurface->CreateImpactEffect(fProxySpeed*0.3f,vProxyPos,1,NULL, pWorld->GetPhysicsWorld());
 		}
 	}
 	

@@ -542,15 +542,15 @@ cPlayerState_Move_BodyCallback::cPlayerState_Move_BodyCallback(cPlayer *apPlayer
 	mlBackCount =0;
 }
 
-bool cPlayerState_Move_BodyCallback::OnBeginCollision(iPhysicsBody *apBody, iPhysicsBody *apCollideBody)
+bool cPlayerState_Move_BodyCallback::OnAABBCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody)
 {
 	return true;
 }
 
 
-void cPlayerState_Move_BodyCallback::OnCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody,cPhysicsContactData* apContactData)
+void cPlayerState_Move_BodyCallback::OnBodyCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody,cPhysicsContactData* apContactData)
 {
-	if(mpPlayer->GetCharacterBody()->GetBody() == apCollideBody)
+	if(mpPlayer->GetCharacterBody()->GetCurrentBody() == apCollideBody)
 	{
 		mlBackCount = 5;
 	}
@@ -579,7 +579,7 @@ void cPlayerState_Move::OnUpdate(float afTimeStep)
 	if(mpCallback->mlBackCount > 0)
 	{
 		mpCallback->mlBackCount--;
-		mpPlayer->GetCharacterBody()->Move(eCharDir_Forward,-1,afTimeStep);
+		mpPlayer->GetCharacterBody()->Move(eCharDir_Forward,-1);
 	}
 
 	//////////////////////////////////////
@@ -763,7 +763,7 @@ void cPlayerState_Move::EnterState(iPlayerState* apPrevState)
 
 	//make forward non y dependant
 	mvForward.y =0;
-	mvForward.Normalise();
+	mvForward.Normalize();
 
 	//Get the body to push
 	mpPushBody = mpPlayer->GetPushBody();
@@ -916,7 +916,7 @@ void cPlayerState_Push::OnUpdate(float afTimeStep)
 
 	//Not really needed. character body should fix.
 	cVector3f vNewPos = vPlayerPos;
-	iPhysicsBody *pBody = mpPlayer->GetCharacterBody()->GetBody();
+	iPhysicsBody *pBody = mpPlayer->GetCharacterBody()->GetCurrentBody();
 	pPhysicsWorld->CheckShapeWorldCollision(&vNewPos,pBody->GetShape(), 
 										cMath::MatrixTranslate(vPlayerPos),
 										pBody,false, true, NULL,true);
@@ -994,8 +994,8 @@ bool cPlayerState_Push::OnMoveForwards(float afMul, float afTimeStep)
 			cCollideData collData;
 			collData.SetMaxSize(32);
 			bool bCollide = pPhysicsWorld->CheckShapeCollision(
-				pPlayerBody->GetShape(), cMath::MatrixTranslate(pPlayerBody->GetPosition()),
-				mpPushBody->GetShape(), mtxBodyMove,collData,32);
+				pPlayerBody->GetCurrentShape(), cMath::MatrixTranslate(pPlayerBody->GetPosition()),
+				mpPushBody->GetShape(), mtxBodyMove,collData,32,true);
 
 			if(bCollide)
 			{
@@ -1112,11 +1112,11 @@ void cPlayerState_Push::EnterState(iPlayerState* apPrevState)
 	//Set the directions to move the body in
 	mvForward = pCamera->GetForward();
 	mvForward.y =0;
-	mvForward.Normalise();
+	mvForward.Normalize();
 
 	mvRight = pCamera->GetRight();
 	mvRight.y =0;
-	mvRight.Normalise();
+	mvRight.Normalize();
 
 	//Get the body to push
 	mpPushBody = mpPlayer->GetPushBody();

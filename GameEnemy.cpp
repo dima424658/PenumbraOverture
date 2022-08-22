@@ -525,7 +525,7 @@ void iGameEnemy::OnWorldLoad()
 	if(mbAttachMeshToBody && mfHealth > 0)
 		mpMover->GetCharBody()->SetEntity(mpMeshEntity);
 	
-	mpMover->GetCharBody()->GetBody()->SetUserData(this);
+	mpMover->GetCharBody()->GetCurrentBody()->SetUserData(this);
 
 	mpMover->GetCharBody()->Update(0.001f);
 
@@ -670,12 +670,12 @@ void iGameEnemy::OnPostSceneDraw()
 
 	mFindGround.GetGround(vStartPos,cVector3f(0,-1,0),NULL,&vNormal);
 	
-	vNormal.Normalise();
+	vNormal.Normalize();
 	float fAngle = cMath::Vector3Angle(vUp,vNormal);
 	cVector3f vRotateAxis = cMath::Vector3Cross(vUp,vNormal);
 	//cVector3f vRotateAxis2 = cMath::Vector3Cross(vUp,vRotateAxis);
 
-	vRotateAxis.Normalise();
+	vRotateAxis.Normalize();
 	cQuaternion qRotation = cQuaternion(fAngle, vRotateAxis);
 	cMatrixf mtxPoseRotation = cMath::MatrixQuaternion(qRotation);
 
@@ -832,7 +832,7 @@ void iGameEnemy::Update(float afTimeStep)
 	cBoundingVolume worldBV;
 	worldBV.SetLocalMinMax(pPhysicsWorld->GetWorldSizeMin(),pPhysicsWorld->GetWorldSizeMax());
 
-	if(cMath::CheckCollisionBV(worldBV, *mpMover->GetCharBody()->GetBody()->GetBV())==false)
+	if(cMath::CheckCollisionBV(worldBV, *mpMover->GetCharBody()->GetCurrentBody()->GetBoundingVolume())==false)
 	{
 		SetHealth(0);
 		SetActive(false);
@@ -1182,7 +1182,7 @@ void iGameEnemy::UpdateEnemyPose(float afTimeStep)
 		
 		float fDist = vStartPos.y - vPosition.y;
         
-        vNormal.Normalise();
+        vNormal.Normalize();
 		float fAngle = cMath::Vector3Angle(vUp,vNormal);
 		
 		cVector3f vRotateAxis = cMath::Vector3Cross(vUp,vNormal);
@@ -1190,7 +1190,7 @@ void iGameEnemy::UpdateEnemyPose(float afTimeStep)
 
 		//cVector3f vRotateAxis2 = cMath::Vector3Cross(vUp,vRotateAxis);
 		
-		vRotateAxis.Normalise();
+		vRotateAxis.Normalize();
 		cQuaternion qRotation = cQuaternion(fAngle, vRotateAxis);
 		cMatrixf mtxPoseRotation = cMath::MatrixQuaternion(qRotation);
 		
@@ -1273,8 +1273,8 @@ void iGameEnemy::UpdateCheckForPlayer(float afTimeStep)
 	iCharacterBody *pPlayerBody = mpInit->mpPlayer->GetCharacterBody();
 
 	float fDist = cMath::Vector3Dist(mpMover->GetCharBody()->GetPosition(),pPlayerBody->GetPosition());
-	float fMinLength = mpMover->GetCharBody()->GetBody()->GetBV()->GetRadius() + 
-						pPlayerBody->GetBody()->GetBV()->GetRadius();
+	float fMinLength = mpMover->GetCharBody()->GetCurrentBody()->GetBoundingVolume()->GetRadius() + 
+						pPlayerBody->GetCurrentBody()->GetBoundingVolume()->GetRadius();
 
 	//Lower some stuff if player is hidden
 	float fStartFOV = mfFOV;
@@ -1768,7 +1768,6 @@ void iGameEnemy::LoadFromSaveData(iGameEntity_SaveData *apSaveData)
 
 	mpMover->GetCharBody()->SetPitch(pData->mvCharBodyRotation.x);
 	mpMover->GetCharBody()->SetYaw(pData->mvCharBodyRotation.y);
-	mpMover->GetCharBody()->UpdateMoveMarix();
 
 	kCopyFromVar(pData,mlCurrentPatrolNode);
 	kCopyFromVar(pData,mvLastPlayerPos);

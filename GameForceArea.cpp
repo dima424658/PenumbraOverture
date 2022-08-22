@@ -114,7 +114,7 @@ cGameForceArea::~cGameForceArea(void)
 void cGameForceArea::Setup()
 {
 	mvUp = cMath::MatrixInverse(mvBodies[0]->GetWorldMatrix()).GetUp();
-	mvUp.Normalise();
+	mvUp.Normalize();
 }
 
 //-----------------------------------------------------------------------
@@ -157,14 +157,14 @@ void cGameForceArea::Update(float afTimeStep)
 
 			/////////////////////////
 			//Bounding volume check
-			if(cMath::CheckCollisionBV(*pBody->GetBV(), *pAreaBody->GetBV())==false) continue;
+			if(cMath::CheckCollisionBV(*pBody->GetBoundingVolume(), *pAreaBody->GetBoundingVolume())==false) continue;
 				
 			///////////////////////////////
 			//Check for collision
 			int lCollideNum = mbForceAtPoint ? 4: 1;
 
 			if(	pPhysicsWorld->CheckShapeCollision(pBody->GetShape(),pBody->GetLocalMatrix(),
-				pAreaBody->GetShape(), pAreaBody->GetLocalMatrix(),collideData,1)==false)
+				pAreaBody->GetShape(), pAreaBody->GetLocalMatrix(),collideData,1,false)==false)
 			{
 				continue;
 			}

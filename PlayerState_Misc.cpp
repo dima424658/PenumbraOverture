@@ -864,7 +864,7 @@ void cPlayerState_Climb::OnUpdate(float afTimeStep)
 	else if(mlState == 2)
 	{
 		mfLeaveAtTopCount -= afTimeStep;
-		pCharBody->Move(eCharDir_Forward,1,afTimeStep);
+		pCharBody->Move(eCharDir_Forward,1);
 
 		if(pCharBody->IsOnGround())
 		{
@@ -952,8 +952,8 @@ bool cPlayerState_Climb::OnMoveForwards(float afMul, float afTimeStep)
 	//Check collision
 	cMatrixf mtxPos = cMath::MatrixTranslate(mvCharPosition);
 	cVector3f vNewPos;
-	pWorld->CheckShapeWorldCollision(&vNewPos,pCharBody->GetShape(),mtxPos,
-										pCharBody->GetBody(),false,true,NULL,true);
+	pWorld->CheckShapeWorldCollision(&vNewPos,pCharBody->GetCurrentShape(),mtxPos,
+										pCharBody->GetCurrentBody(),false,true,NULL,true);
 	if(vNewPos != mtxPos.GetTranslation())
 	{
 		return false;	

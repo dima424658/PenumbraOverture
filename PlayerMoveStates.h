@@ -470,9 +470,9 @@ public:
 	{
 		iCharacterBody *pBody = mpPlayer->GetCharacterBody();
 
-		cVector3f vFeetPos = pBody->GetPosition() - cVector3f(0,pBody->GetShape()->GetSize().y/2,0);
+		cVector3f vFeetPos = pBody->GetPosition() - cVector3f(0,pBody->GetCurrentShape()->GetSize().y/2,0);
 		pBody->SetActiveSize(1);
-		pBody->SetPosition(vFeetPos + cVector3f(0,pBody->GetShape()->GetSize().y/2,0));
+		pBody->SetPosition(vFeetPos + cVector3f(0,pBody->GetCurrentShape()->GetSize().y/2,0));
 		//pBody->SetGravityActive(false);
 	}
 
@@ -480,9 +480,9 @@ public:
 	{
 		iCharacterBody *pBody = mpPlayer->GetCharacterBody();
         		
-		cVector3f vFeetPos = pBody->GetPosition() - cVector3f(0,pBody->GetShape()->GetSize().y/2,0);
+		cVector3f vFeetPos = pBody->GetPosition() - cVector3f(0,pBody->GetCurrentShape()->GetSize().y/2,0);
 		pBody->SetActiveSize(0);
-		pBody->SetPosition(vFeetPos + cVector3f(0,pBody->GetShape()->GetSize().y/2,0));
+		pBody->SetPosition(vFeetPos + cVector3f(0,pBody->GetCurrentShape()->GetSize().y/2,0));
 		
 		/////////////////////////////////////////////////
 		//Check if the player will fit with the newer size
@@ -494,12 +494,12 @@ public:
 		//Check with both bodies. This removes some bugs.
 		for(int i=0; i<2; ++i)
 		{
-			iCollideShape *pShape = pBody->GetExtraBody(i)->GetShape();
+			iCollideShape *pShape = pBody->GetBody(i)->GetShape();
 						
 			cVector3f vNewPos = pBody->GetPosition();
 			bool bCollide = pWorld->CheckShapeWorldCollision(&vNewPos,pShape,
 												cMath::MatrixTranslate(pBody->GetPosition()),
-												pBody->GetBody(),false,true);
+												pBody->GetCurrentBody(),false,true);
 			
 			/*Log("Collide when leaving crouch: %d. NewPos: %s OldPos: %s\n",bCollide,
 														vNewPos.ToString().c_str(),

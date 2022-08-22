@@ -319,7 +319,7 @@ void cGameEnemyState_Spider_Hunt::OnUpdate(float afTimeStep)
 		
 		if(mbLostPlayer)
 		{
-			mpMover->GetCharBody()->Move(eCharDir_Forward,1.0f,afTimeStep);
+			mpMover->GetCharBody()->Move(eCharDir_Forward,1.0f);
 			
 			mfLostPlayerCount -= afTimeStep;
 			if(mfLostPlayerCount <= 0 || mpMover->GetStuckCounter()>0.5f)
@@ -425,7 +425,7 @@ void cGameEnemyState_Spider_Attack::OnUpdate(float afTimeStep)
 			cVector3f vDirection =	mpInit->mpPlayer->GetCamera()->GetPosition() -
 									mpMover->GetCharBody()->GetPosition();
 			float fHeight = cMath::Abs(vDirection.y);
-			vDirection.Normalise();
+			vDirection.Normalize();
 			
 			cVector3f vForce = vDirection * mpEnemySpider->mfAttackForce;
 			vForce.y = fHeight * 0.5f * mpEnemySpider->mfAttackForce;
@@ -537,7 +537,7 @@ void cGameEnemyState_Spider_Flee::OnEnterState(iGameEnemyState *apPrevState)
 	mpMover->GetCharBody()->SetMaxPositiveMoveSpeed(eCharDir_Forward,mpEnemySpider->mfHuntSpeed);
 
 	cVector3f vDir = mpMover->GetCharBody()->GetPosition() - mpPlayer->GetCharacterBody()->GetPosition();
-	vDir.Normalise();
+	vDir.Normalize();
 	
 	cVector3f vStart = 	mpMover->GetCharBody()->GetPosition() + vDir*mpEnemySpider->mfFleeMaxDistance;
 
@@ -715,7 +715,7 @@ void cGameEnemyState_Spider_Dead::OnEnterState(iGameEnemyState *apPrevState)
 
 	//Temp:
 	//mpMover->GetCharBody()->GetBody()->SetCollideCharacter(false);
-	mpMover->GetCharBody()->GetBody()->SetActive(false);
+	mpMover->GetCharBody()->GetCurrentBody()->SetActive(false);
 
 	mpEnemy->GetMover()->Stop();
 }

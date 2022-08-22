@@ -130,8 +130,8 @@ void cGameLadder::OnPlayerInteract()
 		bool bFound = false;
 
 		do{
-			pWorld->CheckShapeWorldCollision(&vNewPos,pCharBody->GetShape(),mtxPos,
-												pCharBody->GetBody(),false,true,NULL,true);
+			pWorld->CheckShapeWorldCollision(&vNewPos,pCharBody->GetCurrentShape(),mtxPos,
+												pCharBody->GetCurrentBody(),false,true,NULL,true);
 			if(vNewPos == mtxPos.GetTranslation())
 			{
 					bFound = true;

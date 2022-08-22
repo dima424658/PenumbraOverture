@@ -521,7 +521,7 @@ void cPlayerState_WeaponMeleeHaptX::OnUpdate(float afTimeStep)
 			float fMaxDiffLength =0.1f;
 			if(vDiff.Length() > fMaxDiffLength)
 			{
-				vDiff.Normalise();
+				vDiff.Normalize();
 				vDiff = vDiff * fMaxDiffLength;
 			}
 
@@ -882,12 +882,12 @@ bool cPlayerState_WeaponMeleeHaptX::CheckAttack(const cMatrixf& a_mtxTransform, 
 	while(enemyIt.HasNext())
 	{
 		iGameEnemy *pEnemy = enemyIt.Next();
-		iPhysicsBody *pBody = pEnemy->GetMover()->GetCharBody()->GetBody();
+		iPhysicsBody *pBody = pEnemy->GetMover()->GetCharBody()->GetCurrentBody();
 		float fMass = pBody->GetMass();
 
 		if(pEnemy->GetMover()->GetCharBody()->IsActive()==false) continue;
 
-		if(cMath::CheckCollisionBV(tempBV, *pBody->GetBV()))
+		if(cMath::CheckCollisionBV(tempBV, *pBody->GetBoundingVolume()))
 		{
 			if(pEnemy->GetMeshEntity()->CheckColliderShapeCollision(pPhysicsWorld,
 									mpCollider,	a_mtxTransform,&lstPostions,NULL)==false)
@@ -905,7 +905,7 @@ bool cPlayerState_WeaponMeleeHaptX::CheckAttack(const cMatrixf& a_mtxTransform, 
 			}
 
 			cVector3f vForceDir = pCamera->GetForward();
-			vForceDir.Normalise();
+			vForceDir.Normalize();
 
 			//Add force to bodies
 			for(int i=0; i < pEnemy->GetBodyNum(); ++i)
@@ -969,10 +969,10 @@ bool cPlayerState_WeaponMeleeHaptX::CheckAttack(const cMatrixf& a_mtxTransform, 
 		if(pBody->IsCharacter()) continue;
 
 
-		if(cMath::CheckCollisionBV(tempBV, *pBody->GetBV()))
+		if(cMath::CheckCollisionBV(tempBV, *pBody->GetBoundingVolume()))
 		{
 			if(pPhysicsWorld->CheckShapeCollision(pBody->GetShape(),pBody->GetLocalMatrix(),
-				mpCollider,a_mtxTransform,collideData,1)==false)
+				mpCollider,a_mtxTransform,collideData,1,false)==false)
 			{
 				continue;
 			}
@@ -1075,7 +1075,7 @@ void cPlayerState_WeaponMeleeHaptX::HitBody(iPhysicsBody *apBody, float afMinImp
 
 	if(fMass>0 && fForceSize >0)
 	{
-		vForceDir.Normalise();
+		vForceDir.Normalize();
 
 		//pBody->AddForce(vForceDir * fForceSize);
 		apBody->AddImpulse(vForceDir *fForceSize);

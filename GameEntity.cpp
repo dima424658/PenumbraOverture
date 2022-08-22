@@ -534,7 +534,7 @@ void iGameEntity::OnUpdate(float afTimeStep)
 			vTempBodies.push_back(mvBodies[i]);
 		}
 		mvBodies.clear();
-		mvBodies.push_back(mpCharBody->GetBody());
+		mvBodies.push_back(mpCharBody->GetCurrentBody());
 	}
 	
 	cCollideData collideData;
@@ -559,13 +559,13 @@ void iGameEntity::OnUpdate(float afTimeStep)
 				iPhysicsBody *pChildBody = pEntity->mvBodies[j];
 				
 				//if(msName == "liftclose") Log("Start shape collision....");
-				if(cMath::CheckCollisionBV( *pParentBody->GetBV(),*pChildBody->GetBV()))
+				if(cMath::CheckCollisionBV( *pParentBody->GetBoundingVolume(),*pChildBody->GetBoundingVolume()))
 				{
 					bCollide = pPhysicsWorld->CheckShapeCollision(pParentBody->GetShape(), 
 																pParentBody->GetLocalMatrix(),
 																pChildBody->GetShape(), 
 																pChildBody->GetLocalMatrix(),
-																collideData,1);
+																collideData,1,false);
 				}
 				//if(msName == "liftclose") Log("end it\n");
 				if(bCollide) break;

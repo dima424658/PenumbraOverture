@@ -952,7 +952,7 @@ void cGameEnemyState_Dog_Hunt::OnUpdate(float afTimeStep)
 		
 		if(mbLostPlayer)
 		{
-			mpMover->GetCharBody()->Move(eCharDir_Forward,1.0f,afTimeStep);
+			mpMover->GetCharBody()->Move(eCharDir_Forward,1.0f);
 			
 			mfLostPlayerCount -= afTimeStep;
 			if(mfLostPlayerCount <= 0 || mpMover->GetStuckCounter()>0.5f)
@@ -1321,7 +1321,7 @@ void cGameEnemyState_Dog_Flee::OnUpdate(float afTimeStep)
 			else
 				mpEnemy->ChangeState(STATE_HUNT);
 		}
-		mpMover->GetCharBody()->Move(eCharDir_Forward,-1.0f,afTimeStep);
+		mpMover->GetCharBody()->Move(eCharDir_Forward,-1.0f);
 		mpMover->TurnToPos(mpInit->mpPlayer->GetCharacterBody()->GetFeetPosition());
 	}
 	else
@@ -1663,7 +1663,7 @@ void cGameEnemyState_Dog_KnockDown::OnUpdate(float afTimeStep)
 	if(mbCheckAnim)
 	{
 		iCharacterBody *pCharBody = mpEnemy->GetMover()->GetCharBody();
-		cBoundingVolume *pBV = pCharBody->GetBody()->GetBoundingVolume();
+		cBoundingVolume *pBV = pCharBody->GetCurrentBody()->GetBoundingVolume();
 		
 		////////////////////////////////////////////////
 		//Add a force to all objects around dog.
@@ -1685,7 +1685,7 @@ void cGameEnemyState_Dog_KnockDown::OnUpdate(float afTimeStep)
 
 			if(pBody->GetCollideCharacter()==false) continue;
 			if(pBody->IsActive()==false) continue;
-			if(pBody == pCharBody->GetBody()) continue;
+			if(pBody == pCharBody->GetCurrentBody()) continue;
 
 			if(cMath::CheckCollisionBV(*pBody->GetBoundingVolume(), *pBV))
 			{
@@ -1693,7 +1693,7 @@ void cGameEnemyState_Dog_KnockDown::OnUpdate(float afTimeStep)
 				float fLength = vDir.Length();
 				//vDir.y *= 0.1f;
 				//if(vDir.x ==0 && vDir.z ==0) vDir.x = 0.3f;
-				vDir.Normalise();
+				vDir.Normalize();
 				
 				if(fLength==0) fLength = 0.001f;
 				float fForce = (1 / fLength) * 2;

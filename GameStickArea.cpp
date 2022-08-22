@@ -225,7 +225,7 @@ void cGameStickArea::Update(float afTimeStep)
 			pBody->IsCharacter()==false)
 		{
 			//Bounding volume check
-			//if(cMath::CheckCollisionBV(*pBody->GetBV(), *pAreaBody->GetBV())==false) continue;
+			//if(cMath::CheckCollisionBV(*pBody->GetBoundingVolume(), *pAreaBody->GetBoundingVolume())==false) continue;
 
             bool bCheck = false;
 			if(mbCheckCenterInArea)
@@ -233,11 +233,11 @@ void cGameStickArea::Update(float afTimeStep)
 				cVector3f vPos =	pBody->GetLocalPosition() + 
 									cMath::MatrixMul(	pBody->GetLocalMatrix().GetRotation(),
 														pBody->GetMassCentre());
-				bCheck = cMath::PointBVCollision(vPos,*pAreaBody->GetBV());
+				bCheck = cMath::PointBVCollision(vPos,*pAreaBody->GetBoundingVolume());
 			}
 			else
 			{
-				bCheck = cMath::CheckCollisionBV(*pBody->GetBV(),*pAreaBody->GetBV());
+				bCheck = cMath::CheckCollisionBV(*pBody->GetBoundingVolume(),*pAreaBody->GetBoundingVolume());
 			}
 
 			if(bCheck==false)
@@ -258,7 +258,7 @@ void cGameStickArea::Update(float afTimeStep)
 														pAreaBody->GetLocalMatrix(),
 														pBody->GetShape(), 
 														pBody->GetLocalMatrix(),
-														collideData,1);
+														collideData,1,false);
 			if(bCollide)
 			{
 				if(msAttachFunction!="")
@@ -358,7 +358,7 @@ void cGameStickArea::DetachBody()
 
         mpAttachedBody->SetGravity(true);
 		mpAttachedBody->SetMass(mfBodyMass);
-		mpAttachedBody->SetEnabled(true);
+		mpAttachedBody->Enable();
 
 		//Log("Body mass: %f\n",mpAttachedBody->GetMass());
 

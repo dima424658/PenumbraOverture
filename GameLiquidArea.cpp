@@ -157,7 +157,7 @@ void cGameLiquidArea::Update(float afTimeStep)
 
 	////////////////////////////////////////////////////////
 	//Check if player camera is in water.
-	if(cMath::PointBVCollision(pCam->GetPosition(),*pAreaBody->GetBV()))
+	if(cMath::PointBVCollision(pCam->GetPosition(),*pAreaBody->GetBoundingVolume()))
 	{
 		if(mpInit->mpEffectHandler->GetUnderwater()->IsActive()==false)
 		{
@@ -186,7 +186,7 @@ void cGameLiquidArea::Update(float afTimeStep)
 
 			/////////////////////////
 			//Bounding volume check
-			if(cMath::CheckCollisionBV(*pBody->GetBV(), *pAreaBody->GetBV())==false)
+			if(cMath::CheckCollisionBV(*pBody->GetBoundingVolume(), *pAreaBody->GetBoundingVolume())==false)
 			{
 				pBody->SetBuoyancyActive(false);
 				continue;
@@ -195,7 +195,7 @@ void cGameLiquidArea::Update(float afTimeStep)
 			///////////////////////////////
 			//Check for collision
 			if(pPhysicsWorld->CheckShapeCollision(pBody->GetShape(),pBody->GetLocalMatrix(),
-				pAreaBody->GetShape(), pAreaBody->GetLocalMatrix(),collideData,1)==false)
+				pAreaBody->GetShape(), pAreaBody->GetLocalMatrix(),collideData,1,false)==false)
 			{
 				pBody->SetBuoyancyActive(false);
 				continue;
@@ -257,7 +257,7 @@ void cGameLiquidArea::Update(float afTimeStep)
 					
 
 					pBody->SetBuoyancySurface(tempPlane);
-					pBody->SetEnabled(true);
+					pBody->Enable();
 				}
     		}
 		}

@@ -169,7 +169,7 @@ void cPreMenu::Reset()
 		cRaindrop* pRaindrop = &(mvRaindropVector[i]);
 		pRaindrop->vPos = cVector2f(cMath::RandRectf(-20,800),-50);
 		pRaindrop->vDir = cVector2f(cMath::RandRectf(20,100), 600);
-		pRaindrop->vDir.Normalise();
+		pRaindrop->vDir.Normalize();
 		pRaindrop->fColor = 1;
 		pRaindrop->fLength = cMath::RandRectf(10,40);
 		pRaindrop->mpGfx = mpRaindropGfx;
@@ -363,7 +363,7 @@ void cPreMenu::Update(float afTimeStep)
 		{
 			pRaindrop->vPos = cVector2f(cMath::RandRectf(-60,800),-80);
 			pRaindrop->vDir = cVector2f(cMath::RandRectf(20,100), 600);
-			pRaindrop->vDir.Normalise();
+			pRaindrop->vDir.Normalize();
 			pRaindrop->fLength = cMath::RandRectf(30,70);
 			pRaindrop->fColor = cMath::RandRectf(0.5f,1) * mfRaindropFade;
 		}

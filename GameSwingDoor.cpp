@@ -273,7 +273,7 @@ void cGameSwingDoor::SetLocked(bool abX)
 	for(size_t i=0; i<mvBodies.size(); ++i)
 	{
 		iPhysicsBody *pBody = mvBodies[i];
-		pBody->SetEnabled(true);
+		pBody->Enable();
 	}
 }
 

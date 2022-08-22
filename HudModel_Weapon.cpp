@@ -555,12 +555,12 @@ void cHudModel_WeaponMelee::Attack()
 	while(enemyIt.HasNext())
 	{
 		iGameEnemy *pEnemy = enemyIt.Next();
-		iPhysicsBody *pBody = pEnemy->GetMover()->GetCharBody()->GetBody();
+		iPhysicsBody *pBody = pEnemy->GetMover()->GetCharBody()->GetCurrentBody();
 		float fMass = pBody->GetMass();
 
 		if(pEnemy->GetMover()->GetCharBody()->IsActive()==false) continue;
 
-		if(cMath::CheckCollisionBV(tempBV, *pBody->GetBV()))
+		if(cMath::CheckCollisionBV(tempBV, *pBody->GetBoundingVolume()))
 		{
 			/*if(pPhysicsWorld->CheckShapeCollision(pBody->GetShape(),pBody->GetLocalMatrix(),
 				mvAttacks[mlCurrentAttack].mpCollider,
@@ -585,7 +585,7 @@ void cHudModel_WeaponMelee::Attack()
 			}
 
 			cVector3f vForceDir = pCamera->GetForward();
-			vForceDir.Normalise();
+			vForceDir.Normalize();
 			
 			//Add force to bodies
 			for(int i=0; i < pEnemy->GetBodyNum(); ++i)
@@ -651,11 +651,11 @@ void cHudModel_WeaponMelee::Attack()
 		if(pBody->IsCharacter()) continue;
 
 		
-		if(cMath::CheckCollisionBV(tempBV, *pBody->GetBV()))
+		if(cMath::CheckCollisionBV(tempBV, *pBody->GetBoundingVolume()))
 		{
 			if(pPhysicsWorld->CheckShapeCollision(pBody->GetShape(),pBody->GetLocalMatrix(),
 											mvAttacks[mlCurrentAttack].mpCollider,
-											mtxDamage,collideData,1)==false)
+											mtxDamage,collideData,1,false)==false)
 			{
 				continue;
 			}
@@ -813,7 +813,7 @@ void cHudModel_WeaponMelee::HitBody(iPhysicsBody *apBody)
 
 	if(fMass>0 && fForceSize >0)
 	{
-		vForceDir.Normalise();
+		vForceDir.Normalize();
 
 		//pBody->AddForce(vForceDir * fForceSize);
 		apBody->AddImpulse(vForceDir *fForceSize);

@@ -364,7 +364,7 @@ void cGameEnemyState_Worm_Hunt::OnUpdate(float afTimeStep)
 		
 		if(mbLostPlayer)
 		{
-			mpMover->GetCharBody()->Move(eCharDir_Forward,1.0f,afTimeStep);
+			mpMover->GetCharBody()->Move(eCharDir_Forward,1.0f);
 			
 			mfLostPlayerCount -= afTimeStep;
 			if(mfLostPlayerCount <= 0 || mpMover->GetStuckCounter()>0.5f)
@@ -792,15 +792,15 @@ void cGameEnemy_Worm::OnUpdate(float afTimeStep)
 			cMatrixf mtxRot = cMath::MatrixQuaternion(qRotation);
 			mvRootForward = cMath::MatrixMul(mtxRot,mvRootForward);
 			//mvRootForward.y=0;
-			mvRootForward.Normalise();
+			mvRootForward.Normalize();
 			
 			/*cVector3f vLastRight = mvRootRight;
 			mvRootRight = cMath::MatrixMul(	mtxRot,	mvRootRight);
 			mvRootRight.y =0; 
-			mvRootRight.Normalise(); //Make sure x-z plane
+			mvRootRight.Normalize(); //Make sure x-z plane
 			
 			mvRootUp = cMath::Vector3Cross(mvRootRight,mvRootForward);
-			mvRootUp.Normalise();*/
+			mvRootUp.Normalize();*/
 		}
 	}
 
@@ -863,16 +863,16 @@ void cGameEnemy_Worm::OnUpdate(float afTimeStep)
 				
 				pSegment->mvForward = cMath::MatrixMul(	cMath::MatrixQuaternion(qRotation),
 														pSegment->mvForward);
-				pSegment->mvForward.Normalise();
+				pSegment->mvForward.Normalize();
 				
 				/*pSegment->mvRight = cMath::MatrixMul(	cMath::MatrixQuaternion(qRotation),
 														pSegment->mvRight);
 				
-				pSegment->mvRight.y =0; pSegment->mvRight.Normalise();
+				pSegment->mvRight.y =0; pSegment->mvRight.Normalize();
 				
 
 				pSegment->mvUp = cMath::Vector3Cross(pSegment->mvRight,pSegment->mvForward);
-				pSegment->mvUp.Normalise();*/
+				pSegment->mvUp.Normalize();*/
 			}
 		}
 		vSegForward = pSegment->mvForward;

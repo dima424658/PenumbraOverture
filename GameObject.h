@@ -48,8 +48,8 @@ class cGameObjectBodyCallback : public iPhysicsBodyCallback
 public:
 	cGameObjectBodyCallback(cInit *apInit, cGameObject *apObject);
 
-	bool OnBeginCollision(iPhysicsBody *apBody, iPhysicsBody *apCollideBody);
-	void OnCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody,cPhysicsContactData* apContactData);
+	bool OnAABBCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody);
+	void OnBodyCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody,cPhysicsContactData* apContactData);
 
 	cInit *mpInit;
 

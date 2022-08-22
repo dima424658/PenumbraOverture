@@ -46,14 +46,14 @@ cGameObjectBodyCallback::cGameObjectBodyCallback(cInit *apInit, cGameObject *apO
 
 //-----------------------------------------------------------------------
 
-bool cGameObjectBodyCallback::OnBeginCollision(iPhysicsBody *apBody, iPhysicsBody *apCollideBody)
+bool cGameObjectBodyCallback::OnAABBCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody)
 {
 	return true;
 }
 
 //-----------------------------------------------------------------------
 
-void cGameObjectBodyCallback::OnCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody,
+void cGameObjectBodyCallback::OnBodyCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody,
 										cPhysicsContactData* apContactData)
 {
 	//Log("OnCollide %s vs %s\n",apBody->GetName().c_str(),apCollideBody->GetName().c_str());
@@ -140,7 +140,7 @@ void cGameObjectBodyCallback::OnCollide(iPhysicsBody *apBody, iPhysicsBody *apCo
 		if(fDamage>0)
 		{
 			//Player
-			if(apCollideBody == mpInit->mpPlayer->GetCharacterBody()->GetBody())
+			if(apCollideBody == mpInit->mpPlayer->GetCharacterBody()->GetCurrentBody())
 			{
 				mpInit->mpPlayer->Damage(fDamage, ePlayerDamageType_BloodSplash);
 			}
@@ -742,7 +742,7 @@ void cGameObject::BreakAction()
 				cVector3f vBodyCentre = cMath::MatrixMul(pBody->GetWorldMatrix(),pBody->GetMassCentre());
 
 				cVector3f vForceDir = vBodyCentre - pParentBody->GetLocalPosition();
-				vForceDir.Normalise();
+				vForceDir.Normalize();
 
 				pBody->AddForce(vForceDir * mBreakProps.mfCenterForce);
 			}
